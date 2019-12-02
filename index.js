@@ -10,6 +10,6 @@ app.get("/", (req, res) => res.sendFile("./index.html"))
 const client = require("socket.io")(server)
 
 client.on("connection", (socket) => {
-	console.log(`User Connected`)
-	socket.on("disconnect", () => console.log(`User Disconnected`))
+	console.log(`${socket.id}\tUser Connected`)
+	socket.on("disconnect", () => console.log(`${socket.id}\tUser Disconnected`))
 })
