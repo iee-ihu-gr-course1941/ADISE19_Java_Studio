@@ -5,20 +5,48 @@
 		<title>Tic-Tac-Toe</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-		<link rel="icon" type="image/png" href="./img/favicon.png">
+		<link rel="icon" type="./image/png" href="./img/favicon.png">
 		<link rel="stylesheet" href="./css/normalize.css">
 		<link rel="stylesheet" href="./css/skeleton.css">
+		<link rel="stylesheet" href="./css/dark-skeleton.css">
+		<style>
+			button {
+				width: 70px;
+				height: 70px;
+				padding: unset;
+				text-align: center;
+				font-size: 30px;
+				font-weight: bold;
+			}
+		</style>
 	</head>
-	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+	<script src="./../node_modules/socket.io-client/dist/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script>
 		const socket = io()
 	</script>
-	<body background="./img/background.png">
+	<body>
 		<div class="container">
-	    	<div class="column" style="margin: 10%">
-	        	<h1>Tic-Tac-Toe</h4>
+	    	<div class="column" style="margin: 10%;">
+	    		<h1 style="font-weight: bold;">Tic-Tac-Toe</h1>
 	        	<p>Work in progress</p>
-	        	<button>Test</button>
+	        	<table class="game">
+	        		<tr>
+	        			<td><button class="cell" id="00"></button></td>
+	        			<td><button class="cell" id="01"></button></td>
+	        			<td><button class="cell" id="02"></button></td>
+	        		</tr>
+	        		<tr>
+	        			<td><button class="cell" id="10"></button></td>
+	        			<td><button class="cell" id="11"></button></td>
+	        			<td><button class="cell" id="12"></button></td>
+	        		</tr>
+	        		<tr>
+	        			<td><button class="cell" id="20"></button></td>
+	        			<td><button class="cell" id="21"></button></td>
+	        			<td><button class="cell" id="22"></button></td>
+	        		</tr>
+	        	</table>
 	      	</div>
 		</div>
 	</body>

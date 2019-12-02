@@ -125,7 +125,7 @@ body {
   line-height: 1.6;
   font-weight: 400;
   font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #dcdcdc; }
+  color: #222; }
 
 
 /* Typography
@@ -182,6 +182,7 @@ input[type="button"] {
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
+  background-color: transparent;
   border-radius: 4px;
   border: 1px solid #bbb;
   cursor: pointer;
@@ -324,8 +325,7 @@ pre > code {
 th,
 td {
   padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #E1E1E1; }
+  text-align: left; }
 th:first-child,
 td:first-child {
   padding-left: 0; }
