@@ -10,26 +10,21 @@
 		<link rel="stylesheet" href="./css/skeleton.css">
 		<link rel="stylesheet" href="./css/dark-skeleton.css">
 		<style>
-			button {
+			button.cell {
 				width: 70px;
 				height: 70px;
 				padding: unset;
 				text-align: center;
-				font-size: 30px;
+				font-size: 3em;
 				font-weight: bold;
 			}
 		</style>
 	</head>
-	<script src="./socket.io/socket.io.js"></script>
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script>
-		const socket = io()
-	</script>
 	<body>
 		<div class="container">
-	    	<div class="column" style="margin: 10%;">
+	    	<div class="column" style="margin: 5%;">
 	    		<h1 style="font-weight: bold;">Tic-Tac-Toe</h1>
-	        	<p>Work in progress</p>
+	        	<h5 id="message">Waiting for an opponent to join...</h5>
 	        	<table class="game">
 	        		<tr>
 	        			<td><button class="cell" id="00"></button></td>
@@ -50,4 +45,7 @@
 	      	</div>
 		</div>
 	</body>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="./socket.io/socket.io.js"></script>
+	<script src="./script.js"></script>
 </html>
