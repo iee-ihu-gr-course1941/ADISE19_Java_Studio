@@ -8,15 +8,19 @@
 		<link rel="icon" type="./image/png" href="./img/favicon.png">
 		<link rel="stylesheet" href="./css/normalize.css">
 		<link rel="stylesheet" href="./css/skeleton.css">
-		<link rel="stylesheet" href="./css/dark-skeleton.css">
 		<style>
-			button.cell {
-				width: 70px;
-				height: 70px;
+            div.game {
+                width: 350px;
+            }
+
+			div.game button {
+				width: 100px;
+				height: 100px;
 				padding: unset;
 				text-align: center;
 				font-size: 3em;
 				font-weight: bold;
+				margin: 5px;
 			}
 		</style>
 	</head>
@@ -24,24 +28,12 @@
 		<div class="container">
 	    	<div class="column" style="margin: 5%;">
 	    		<h1 style="font-weight: bold;">Tic-Tac-Toe</h1>
-	        	<h5 id="message">Waiting for an opponent to join...</h5>
-	        	<table class="game">
-	        		<tr>
-	        			<td><button class="cell" id="00"></button></td>
-	        			<td><button class="cell" id="01"></button></td>
-	        			<td><button class="cell" id="02"></button></td>
-	        		</tr>
-	        		<tr>
-	        			<td><button class="cell" id="10"></button></td>
-	        			<td><button class="cell" id="11"></button></td>
-	        			<td><button class="cell" id="12"></button></td>
-	        		</tr>
-	        		<tr>
-	        			<td><button class="cell" id="20"></button></td>
-	        			<td><button class="cell" id="21"></button></td>
-	        			<td><button class="cell" id="22"></button></td>
-	        		</tr>
-	        	</table>
+                <div class="game">
+                    <h5 id="message">Waiting for an opponent to join...</h5>
+                    <button id="00"></button><button id="01"></button><button id="02"></button>
+                    <button id="10"></button><button id="11"></button><button id="12"></button>
+                    <button id="20"></button><button id="21"></button><button id="22"></button>
+                </div>
 	      	</div>
 		</div>
 	</body>
