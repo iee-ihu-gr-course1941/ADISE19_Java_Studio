@@ -4,6 +4,8 @@ const express = require("express")
 const app = express()
 const server = require("http").Server(app)
 
+server.listen(80, () => console.log("Listening on %s.", server.address().port))
+
 const mysql = require("mysql")
 const connection = mysql.createConnection({
   	host: process.env.DBHOST,
@@ -16,8 +18,6 @@ connection.connect((err) => {
   	if (err) return console.error("Error Connecting: %s", err.stack)
     console.log("Connected as ID: %d", connection.threadId)
 })
-
-server.listen(80, () => console.log("Listening on %s.", server.address().port))
 
 app.use(express.static("./client"))
 app.get("/", (req, res) => res.sendFile("./index.html"))
