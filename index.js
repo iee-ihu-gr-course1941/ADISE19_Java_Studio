@@ -8,12 +8,13 @@ const mysql = require("mysql")
 const connection = mysql.createConnection({
   	host: process.env.DBHOST,
   	user: process.env.DBUSER,
-  	password: process.env.DBPASS
+  	password: process.env.DBPASS,
+  	database: process.env.DBDATABASE
 })
 
 connection.connect((err) => {
-  	if (err) return console.error("error connecting: " + err.stack)
-    console.log("connected as id " + connection.threadId)
+  	if (err) return console.error("Error Connecting: %s", err.stack)
+    console.log("Connected as ID: %d", connection.threadId)
 })
 
 server.listen(80, () => console.log("Listening on %s.", server.address().port))
