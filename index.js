@@ -1,6 +1,20 @@
+require("dotenv").config()
+
 const express = require("express")
 const app = express()
 const server = require("http").Server(app)
+
+const mysql = require("mysql")
+const connection = mysql.createConnection({
+  	host: process.env.DBHOST,
+  	user: process.env.DBUSER,
+  	password: process.env.DBPASS
+})
+
+connection.connect((err) => {
+  	if (err) return console.error("error connecting: " + err.stack)
+    console.log("connected as id " + connection.threadId)
+})
 
 server.listen(80, () => console.log("Listening on %s.", server.address().port))
 
