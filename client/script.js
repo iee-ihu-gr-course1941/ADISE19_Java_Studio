@@ -1,10 +1,34 @@
+const socket = io()
+
+let playerTurn = true
+let playerSymbol = "X"
+let playerOpponent
+
+socket.on("startGame", (symbol, opponent) => {
+    playerTurn = symbol === "X"
+    playerSymbol = symbol
+    playerOpponent = opponent
+
+    $(".game > button").attr("disabled", !playerTurn)
+    $("#message").text(playerTurn ? "It's your turn." : "It's your opponent's turn.")
+})
+
+socket.on("updateGame", (symbol, button) => {
+    playerTurn = playerSymbol !== symbol
+
+    $(`#${button}`).text(symbol)
+    $(".game > button").attr("disabled", !playerTurn)
+    $("#message").text(playerTurn ? "It's your turn." : "It's your opponent's turn.")
+})
+
 $(document).ready(() => {
-	const socket = io()
+    $(".game > button").attr("disabled", true)
+    $(".game > button").click(function (event) {
+        event.preventDefault()
+        
+        if (!playerTurn) return
+        if ($(this).text().length) return
 
-	let turn = false
-
-	socket.on("startGame", (symbol) => {
-		if (symbol === "X") turn = true
-		$("#message").text(turn ? "It's your turn." : "It's your opponent's turn.")
-	})
+        socket.emit("makeMove", playerSymbol, playerOpponent, $(this).attr("id"))
+    })
 })

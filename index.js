@@ -31,8 +31,8 @@ client.on("connection", (socket) => {
 		console.log("%s is paired with %s", socket.id, pending)
 
 		socket.join(pending)
-		socket.in(pending).emit("startGame", "X")
-		socket.emit("startGame", "O")
+		socket.in(pending).emit("startGame", "X", socket.id)
+		socket.emit("startGame", "O", pending)
 
 		pending = null
 	}
@@ -42,6 +42,11 @@ client.on("connection", (socket) => {
 	}
 
 	console.log("%s\tUser Connected", socket.id)
+
+	socket.on("makeMove", (symbol, opponent, button) => {
+		socket.emit("updateGame", symbol, button)
+		client.to(opponent).emit("updateGame", symbol, button)
+	})
 
 	socket.on("disconnect", () => {
 		if (pending && pending === socket.id) pending = null
