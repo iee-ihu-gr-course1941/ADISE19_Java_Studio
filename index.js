@@ -2,6 +2,10 @@ require("dotenv").config()
 
 const express = require("express")
 const app = express()
+
+app.use(express.static("./client"))
+app.get("/", (req, res) => res.sendFile("./index.html"))
+
 const server = require("http").Server(app)
 
 server.listen(80, () => console.log("Listening on %s.", server.address().port))
@@ -19,33 +23,26 @@ connection.connect((err) => {
     console.log("Connected as ID: %d", connection.threadId)
 })
 
-app.use(express.static("./client"))
-app.get("/", (req, res) => res.sendFile("./index.html"))
-
-const client = require("socket.io")(server)
+const io = require("socket.io")(server)
 
 let pending = null
 
-client.on("connection", (socket) => {
+io.on("connection", (socket) => {
+	console.log("%s\tUser Connected", socket.id)
+
 	if (pending) {
 		console.log("%s is paired with %s", socket.id, pending)
 
-		socket.join(pending)
-		socket.in(pending).emit("startGame", "X", socket.id)
 		socket.emit("startGame", "O", pending)
+		io.to(pending).emit("startGame", "X", socket.id)
 
 		pending = null
 	}
-	else {
-		socket.join(socket.id)
-		pending = socket.id
-	}
-
-	console.log("%s\tUser Connected", socket.id)
+	else pending = socket.id
 
 	socket.on("makeMove", (symbol, opponent, button) => {
 		socket.emit("updateGame", symbol, button)
-		client.to(opponent).emit("updateGame", symbol, button)
+		io.to(opponent).emit("updateGame", symbol, button)
 	})
 
 	socket.on("disconnect", () => {

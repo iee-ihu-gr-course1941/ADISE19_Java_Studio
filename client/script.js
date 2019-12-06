@@ -24,8 +24,6 @@ socket.on("updateGame", (symbol, button) => {
 $(document).ready(() => {
     $(".game > button").attr("disabled", true)
     $(".game > button").click(function (event) {
-        event.preventDefault()
-        
         if (!playerTurn) return
         if ($(this).text().length) return
 
