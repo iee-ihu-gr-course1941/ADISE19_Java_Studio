@@ -31,18 +31,21 @@ io.on("connection", (socket) => {
 	console.log("%s\tUser Connected", socket.id)
 
 	if (pending) {
-		console.log("%s is paired with %s", socket.id, pending)
+		console.log("%s is paired with %s", socket.id, pending.id)
 
-		socket.emit("startGame", "O", pending)
-		io.to(pending).emit("startGame", "X", socket.id)
+		socket.opponent = pending
+		pending.opponent = socket
+
+		socket.emit("startGame", "O")
+		pending.emit("startGame", "X")
 
 		pending = null
 	}
-	else pending = socket.id
+	else pending = socket
 
-	socket.on("makeMove", (symbol, opponent, button) => {
+	socket.on("makeMove", (symbol, button) => {
 		socket.emit("updateGame", symbol, button)
-		io.to(opponent).emit("updateGame", symbol, button)
+		socket.opponent.emit("updateGame", symbol, button)
 	})
 
 	socket.on("disconnect", () => {

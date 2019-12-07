@@ -2,12 +2,10 @@ const socket = io()
 
 let playerTurn = true
 let playerSymbol = "X"
-let playerOpponent
 
-socket.on("startGame", (symbol, opponent) => {
+socket.on("startGame", (symbol) => {
     playerTurn = symbol === "X"
     playerSymbol = symbol
-    playerOpponent = opponent
 
     $(".game > button").attr("disabled", !playerTurn)
     $("#message").text(playerTurn ? "It's your turn." : "It's your opponent's turn.")
@@ -27,6 +25,6 @@ $(document).ready(() => {
         if (!playerTurn) return
         if ($(this).text().length) return
 
-        socket.emit("makeMove", playerSymbol, playerOpponent, $(this).attr("id"))
+        socket.emit("makeMove", playerSymbol, $(this).attr("id"))
     })
 })
