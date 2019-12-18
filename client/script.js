@@ -60,4 +60,10 @@ $(document).ready(() => {
         playerMoves++
         socket.emit("makeMove", playerSymbol, $(this).attr("id"))
     })
+    $("#login_register").click(function (event) {
+        if (!$("#username").val()) return
+        if (!$("#password").val()) return
+
+        socket.emit("loginRegister", $("#username").val(), $("#password").val())    
+    })
 })

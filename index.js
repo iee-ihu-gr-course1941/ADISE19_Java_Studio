@@ -48,6 +48,14 @@ io.on("connection", (socket) => {
 		socket.opponent.emit("updateGame", symbol, button)
 	})
 
+	socket.on("loginRegister", (username, password) => {
+        const query = mysql.format("SELECT username FROM users WHERE username=?", [username])
+        connection.query(query, (error, results, fields) => {
+            if (error) throw error
+            if (results[0]) console.log("Username: ", results[0].username)
+        })
+    })
+
 	socket.on("disconnect", () => {
 		if (pending && pending === socket.id) pending = null
 		console.log("%s\tUser Disconnected", socket.id)
