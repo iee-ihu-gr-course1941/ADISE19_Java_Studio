@@ -22,6 +22,21 @@ function isGameOver() {
     return false
 }
 
+socket.on("loginSuccess", (username) => {
+    $(".login").hide()
+    $(".play").show()
+    $("#logged").text(`You're logged in as ${username}.`)
+})
+
+socket.on("loginFailed", () => {
+    $("#login_message").text("Your specified password is incorrect.")
+})
+
+socket.on("opponentLeft", () => {
+    $("#message").text("Your opponent has left the game.")
+    $(".play > button").attr("disabled", false)
+})
+
 socket.on("startGame", (symbol) => {
     playerTurn = symbol === "X"
     playerSymbol = symbol
@@ -54,16 +69,29 @@ socket.on("updateGame", (symbol, button) => {
 $(document).ready(() => {
     $(".game > button").attr("disabled", true)
     $(".game > button").click(function (event) {
+        const button = $(this)
+
         if (!playerTurn) return
-        if ($(this).text().length) return
+        if (button.text().length) return
 
         playerMoves++
-        socket.emit("makeMove", playerSymbol, $(this).attr("id"))
+        socket.emit("makeMove", playerSymbol, button.attr("id"))
     })
-    $("#login_register").click(function (event) {
-        if (!$("#username").val()) return
-        if (!$("#password").val()) return
 
-        socket.emit("loginRegister", $("#username").val(), $("#password").val())    
+    $("#play_player").click(function (event) {
+        $(".play > button").attr("disabled", true)
+        $("#message").text("Waiting for an opponent to join...")
+        
+        socket.emit("queue")
+    })
+
+    $("#login_register").click(function (event) {
+        const username = $("#username").val()
+        const password = $("#password").val()
+
+        if (!username) return
+        if (!password) return
+
+        socket.emit("login-register", username, password)    
     })
 })
