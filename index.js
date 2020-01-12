@@ -38,8 +38,8 @@ io.on("connection", (socket) => {
 			socket.opponent = pending
 			pending.opponent = socket
 
-			socket.emit("startGame", "O")
-			pending.emit("startGame", "X")
+			socket.emit("game started", "O")
+			pending.emit("game started", "X")
 
 			let query = mysql.format("INSERT INTO rooms (player1, player2) VALUES (?, ?)", [socket.username, pending.username])
 			connection.query(query, (err, results, fields) => {
@@ -53,16 +53,21 @@ io.on("connection", (socket) => {
 		else pending = socket
 	})
 
-	socket.on("makeMove", (symbol, button) => {
+	socket.on("finish game", () => {
+		socket.emit("game tied")
+		socket.opponent.emit("game tied")
+	})
+
+	socket.on("make move", (symbol, button) => {
 		let query = mysql.format("INSERT INTO moves (room, player, button, symbol) VALUES (?, ?, ?, ?)", [socket.room, socket.username, button, symbol])
 		connection.query(query, (err, results, fields) => {
 			if (err) console.error(err)
 		})
-		socket.emit("updateGame", symbol, button)
-		socket.opponent.emit("updateGame", symbol, button)
+		socket.emit("update game", symbol, button)
+		socket.opponent.emit("update game", symbol, button)
 	})
 
-	socket.on("login-register", (username, password) => {
+	socket.on("login register", (username, password) => {
         let query = mysql.format("SELECT username, password FROM users WHERE username=?", [username])
         connection.query(query, (err, results, fields) => {
             if (err) console.error(err)
@@ -73,9 +78,9 @@ io.on("connection", (socket) => {
             {
             	if (result.password === password) {
             		socket.username = username
-            		socket.emit("loginSuccess", username)
+            		socket.emit("login successful", username)
             	}
-            	else socket.emit("loginFailed")
+            	else socket.emit("login failed")
             }
         	else {
         		let query = mysql.format("INSERT INTO users (username, password) VALUES (?, ?)", [username, password])
@@ -83,7 +88,7 @@ io.on("connection", (socket) => {
         			if (err) console.error(err)
 
             		socket.username = username
-        			socket.emit("loginSuccess", username)
+        			socket.emit("login successful", username)
         		})
         	}
         })
@@ -91,7 +96,7 @@ io.on("connection", (socket) => {
 
 	socket.on("disconnect", () => {
 		if (pending && pending === socket.id) pending = null
-		if (socket.opponent) socket.opponent.emit("opponentLeft")
+		if (socket.opponent) socket.opponent.emit("opponent left")
 		console.log("%s\tUser Disconnected", socket.id)
 	})
 })
