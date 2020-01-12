@@ -4,6 +4,16 @@ let playerTurn = true
 let playerSymbol = "X"
 let playerMoves = 0
 
+function animateText(element, text) {
+    element.slideUp()
+    element.text(text)
+    element.slideDown()
+}
+
+function resetBoard() {
+    $(".game > button").text("")
+}
+
 function isGameOver() {
     const combos = [
         $("#0").text() + $("#1").text() + $("#2").text(),
@@ -22,6 +32,21 @@ function isGameOver() {
     return false
 }
 
+socket.on("loginSuccess", (username) => {
+    $(".play").slideDown()
+    $(".login").slideUp()
+    animateText($("#logged"), `You're logged in as ${username}.`)
+})
+
+socket.on("loginFailed", () => {
+    $("#login_message").slideDown()
+})
+
+socket.on("opponentLeft", () => {
+    $("#message").text("Your opponent has left the game.")
+    $(".play > button").attr("disabled", false)
+})
+
 socket.on("startGame", (symbol) => {
     playerTurn = symbol === "X"
     playerSymbol = symbol
@@ -37,6 +62,8 @@ socket.on("updateGame", (symbol, button) => {
 
     if(!isGameOver()) {
         if (playerMoves > 4) {
+            $(".play").slideDown()
+            $(".play > button").attr("disabled", false)
             $(".game > button").attr("disabled", true)
             $("#message").text("The game is over, it's a tie.")
         }
@@ -46,6 +73,8 @@ socket.on("updateGame", (symbol, button) => {
         }
     }
     else {
+        $(".play").slideDown()
+        $(".play > button").attr("disabled", false)
         $(".game > button").attr("disabled", true)
         $("#message").text(playerTurn ? "The game is over, you lost." : "The game is over, you won.")
     }
@@ -54,16 +83,34 @@ socket.on("updateGame", (symbol, button) => {
 $(document).ready(() => {
     $(".game > button").attr("disabled", true)
     $(".game > button").click(function (event) {
+        const button = $(this)
+
         if (!playerTurn) return
-        if ($(this).text().length) return
+        if (button.text().length) return
 
         playerMoves++
-        socket.emit("makeMove", playerSymbol, $(this).attr("id"))
+        socket.emit("makeMove", playerSymbol, button.attr("id"))
     })
-    $("#login_register").click(function (event) {
-        if (!$("#username").val()) return
-        if (!$("#password").val()) return
 
-        socket.emit("loginRegister", $("#username").val(), $("#password").val())    
+    $("#play_player").click(function (event) {
+        $(".play").slideUp()
+        $(".play > button").attr("disabled", true)
+
+        $(".game > button").text("")
+        playerMoves = 0
+
+        $("#message").text("Waiting for an opponent to join...").slideDown()
+        
+        socket.emit("queue")
+    })
+
+    $("#login_register").click(function (event) {
+        const username = $("#username").val()
+        const password = $("#password").val()
+
+        if (!username) return
+        if (!password) return
+
+        socket.emit("login-register", username, password)    
     })
 })

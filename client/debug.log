@@ -1,3 +1,0 @@
-[1217/161913.778:ERROR:file_io_win.cc(179)] CreateFile C:\Program Files (x86)\Google\Chrome\settings.dat: Δεν επιτρέπεται η πρόσβαση. (0x5)
-[1217/161913.782:ERROR:registration_protocol_win.cc(84)] TransactNamedPipe: Η διοχέτευση έχει τερματιστεί. (0x6D)
-[1217/161913.783:ERROR:file_io_win.cc(179)] CreateFile C:\Program Files (x86)\Google\Chrome\settings.dat: Δεν επιτρέπεται η πρόσβαση. (0x5)

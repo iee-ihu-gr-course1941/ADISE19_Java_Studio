@@ -27,16 +27,24 @@
 	</head>
 	<body>
 		<div class="container">
-	    	<div class="column" style="margin: 5%;">
+	    	<div class="column" style="margin-top: 5%; margin-bottom: 5%;">
 	    		<h1 style="font-weight: bold;">Tic-Tac-Toe</h1>
+	    		<h5 id="logged">You are not logged in.</h5>
+	    		<hr/>
 	    		<div class="login">
     				<h5>Type your username and password, if the account doesn't exist it will create one.</h5>
-    				<input type="text" name="name" id="username" placeholder="Enter your username" required>
-    				<input type="text" name="name" id="password" placeholder="Enter your password" required>
+    				<input type="text" id="username" placeholder="Enter your username" required>
+    				<input type="password" id="password" placeholder="Enter your password" required>
    					<button class="button-primary" id="login_register">Login / Register</button>
+   					<h6 id="login_message" hidden="hidden" style="color: #d40000; font-weight: bold">You've specified an incorrect password.</h6>
 				</div>
+				<div class="play" hidden="hidden">
+					<button class="button-primary" id="play_player">Play against Player</button>
+					<button class="button-primary" id="play_computer">Play against Computer</button>
+				</div>
+                <h5 id="message" hidden="hidden">Waiting for an opponent to join...</h5>
+				<hr/>
                 <div class="game">
-                    <h5 id="message">Waiting for an opponent to join...</h5>
                     <button id="0"></button><button id="1"></button><button id="2"></button>
                     <button id="3"></button><button id="4"></button><button id="5"></button>
                     <button id="6"></button><button id="7"></button><button id="8"></button>
