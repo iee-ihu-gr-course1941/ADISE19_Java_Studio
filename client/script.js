@@ -1,8 +1,8 @@
 const socket = io()
 
-let playerTurn, playerSymbol, playerMoves
+let playerTurn, playerSymbol, playerMoves, computerGame = false
 
-function isGameOver() {
+function isGameOver (symbol) {
     const combos = [
         $("#0").text() + $("#1").text() + $("#2").text(),
         $("#3").text() + $("#4").text() + $("#5").text(),
@@ -13,11 +13,19 @@ function isGameOver() {
         $("#0").text() + $("#4").text() + $("#8").text(),
         $("#2").text() + $("#4").text() + $("#6").text()
     ]
-    
-    for (let i = 0; i < combos.length; i++) 
-        if (combos[i] === "XXX" || combos[i] === "OOO") return true
 
-    return false
+    if (symbol) {
+        for (let i = 0; i < combos.length; i++) 
+            if (combos[i] === symbol.repeat(3)) return true
+
+        return false
+    }
+    else {
+        for (let i = 0; i < combos.length; i++) 
+            if (combos[i] === "XXX" || combos[i] === "OOO") return true
+
+        return false
+    }
 }
 
 socket.on("login successful", (username) => {
@@ -39,10 +47,20 @@ socket.on("game started", (symbol) => {
     playerTurn = symbol === "X"
     playerSymbol = symbol
     playerMoves = 0
+    computerGame = false
 
     $(".game > button").text("")
     $(".game > button").attr("disabled", !playerTurn)
     $("#message").text(playerTurn ? "It's your turn." : "It's your opponent's turn.")
+})
+
+socket.on("game with computer", () => {
+    playerSymbol = "X"
+    playerMoves = 0
+    computerGame = true
+
+    $(".game > button").text("")
+    $(".game > button").attr("disabled", false)
 })
 
 socket.on("game tied", () => {
@@ -55,7 +73,7 @@ socket.on("game tied", () => {
 socket.on("update game", (symbol, button) => {
     playerTurn = playerSymbol !== symbol
 
-    $(`#${button}`).text(symbol)
+    $("#" + button).text(symbol)
 
     if(!isGameOver()) {
         if (playerMoves > 4) socket.emit("finish game")
@@ -77,18 +95,53 @@ $(document).ready(() => {
     $(".game > button").click(function (event) {
         const button = $(this)
 
-        if (!playerTurn) return
         if (button.text().length) return
+        if (computerGame) {
+            button.text(playerSymbol)
+            playerMoves++
 
-        playerMoves++
-        socket.emit("make move", playerSymbol, button.attr("id"))
+            if (isGameOver("X") || playerMoves > 4) {
+                $(".play").slideDown()
+                $(".play > button").attr("disabled", false)
+                $(".game > button").attr("disabled", true)
+                $("#message").text(isGameOver("X") ? "The game is over, you won." : "The game is over, it's a tie.")
+            }
+            else {
+                let random = Math.floor(Math.random() * 9)
+
+                while ($("#" + random).text().length) 
+                    random = Math.floor(Math.random() * 9)
+
+                $("#" + random).text("O")
+
+                if (isGameOver("O")) {
+                    $(".play").slideDown()
+                    $(".play > button").attr("disabled", false)
+                    $(".game > button").attr("disabled", true)
+                    $("#message").text("The game is over, you lost.")
+                }
+            }
+        }
+        else {
+            if (!playerTurn) return
+
+            playerMoves++
+            socket.emit("make move", playerSymbol, button.attr("id"))
+        }
     })
 
     $("#play_player").click(function (event) {
         $(".play").slideUp()
         $(".play > button").attr("disabled", true)
         $("#message").text("Waiting for an opponent to join...").slideDown()
-        socket.emit("queue")
+        socket.emit("queue player")
+    })
+
+    $("#play_computer").click(function (event) {
+        $(".play").slideUp()
+        $(".play > button").attr("disabled", true)
+        $("#message").text("You're playing against the computer.").slideDown()
+        socket.emit("queue computer")
     })
 
     $("#login_register").click(function (event) {

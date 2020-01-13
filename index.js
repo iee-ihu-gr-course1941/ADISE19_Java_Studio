@@ -31,8 +31,8 @@ let pending = null
 io.on("connection", (socket) => {
 	console.log("%s\tUser Connected", socket.id)
 
-	socket.on("queue", () => {
-		if (pending) {				
+	socket.on("queue player", () => {
+		if (pending) {
 			console.log("%s is paired with %s", socket.username, pending.username)
 
 			socket.opponent = pending
@@ -51,6 +51,16 @@ io.on("connection", (socket) => {
 			})
 		}
 		else pending = socket
+	})
+
+	socket.on("queue computer", () => {
+		let query = mysql.format("INSERT INTO rooms (player1, player2) VALUES (?, ?)", [socket.username, "Computer"])
+		connection.query(query, (err, results, fields) => {
+			if (err) console.error(err)
+
+			socket.room = results.insertId
+		})
+		socket.emit("game with computer")
 	})
 
 	socket.on("finish game", () => {
