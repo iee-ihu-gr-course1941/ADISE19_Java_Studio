@@ -1,12 +1,12 @@
-TIC TAC TOE by JAVA_STUDIO
-###Online game on a 3x3 board, a straight line with "X" or "O" wins.
+# Tic Tac Toe by Java Studio
+A multiplayer Tic Tac Toe that supports multiple games at the same time against real players or against the computer.
 
-####Java_Studio is:
-1.Dionisis Pasenidis
-2.Mihalis Karavas
-3.Stelios Ntailakis
+## Java Studio
+- Pasenidis Dionysios
+- Ntailakis Stelios
+- Karavas Mihail
 
-##Prerequisites:
+## Prerequisites
 You need to download Node.js
 
 ####Modules used:
@@ -17,17 +17,17 @@ You need to download Node.js
          
 
 
-####How to run the game:
-1.Clone
-2.Open the node.js command prompt
-3.Navigate in the project folder
-4.Type-> node index.js
-5.Open localhost from your local browser
+## How to run
+1. Download and install [node.js](https://nodejs.org/en/)
+2. Close the project
+2. Open the node.js command prompt
+3. Navigate to the project's root directory
+4. Type `node index.js` in the command prompt to run the server 
+5. Open your browser and enter localhost
 
 
-####API
-We use sockets to maintain consistent communication through the server and the client,
-we did not use HTTP Methods
+## API
+The game is using WebSockets for consistent communication with the server and the client.
 
 
 
