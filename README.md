@@ -6,16 +6,15 @@ A multiplayer Tic Tac Toe that supports multiple games at the same time against 
 - Ntailakis Stelios
 - Karavas Mihail
 
-## Prerequisites
-You need to download Node.js
+## Node Package Modules
+- [express.js](https://www.npmjs.com/package/express)
+- [socket.io](https://www.npmjs.com/package/socket.io)
+- [mysql](https://www.npmjs.com/package/mysql)
+- [dotenv](https://www.npmjs.com/package/dotenv)
 
-####Modules used:
-    -express
-    -socket.io
-    -mysql
-    -dotenv
-         
-
+## Other Resources
+- [jquery](https://jquery.com/)
+- [skeleton](http://getskeleton.com/)
 
 ## How to run
 1. Download and install [node.js](https://nodejs.org/en/)
@@ -28,8 +27,6 @@ You need to download Node.js
 
 ## API
 The game is using WebSockets for consistent communication with the server and the client.
-
-
 
 
 
